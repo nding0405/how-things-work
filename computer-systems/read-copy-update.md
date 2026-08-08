@@ -116,14 +116,14 @@ $$
 e_n=\mathrm{end}(G_n)
 $$
 
-Here, $<$ means event order in the execution trace.
+Here, $\lt$ means event order in the execution trace.
 
 The required property is:
 
 $$
 \boxed{
 \forall n\in\mathbb N,\forall R,\quad
-s_R<s_n\Longrightarrow e_R<e_n
+s_R\lt s_n\Longrightarrow e_R\lt e_n
 }
 $$
 
@@ -187,7 +187,7 @@ Define:
 $$
 \mathrm{Active}(R,\tau)
 \iff
-s_R\le\tau<e_R
+s_R\le\tau\lt e_R
 $$
 
 At every time $\tau$:
@@ -236,7 +236,7 @@ We want to prove that, during $G_n$:
 
 $$
 \boxed{
-s_R<s_n
+s_R\lt s_n
 \land
 \mathrm{Active}(R,\tau)
 \Longrightarrow
@@ -277,7 +277,7 @@ There is no state in which both obligations are absent.
 Assume, for contradiction, that:
 
 $$
-s_R<s_n
+s_R\lt s_n
 $$
 
 but:
@@ -319,7 +319,7 @@ $$
 This is a contradiction. Therefore:
 
 $$
-s_R<s_n\Longrightarrow e_R<e_n
+s_R\lt s_n\Longrightarrow e_R\lt e_n
 $$
 
 Since $n$ was arbitrary:
@@ -327,7 +327,7 @@ Since $n$ was arbitrary:
 $$
 \boxed{
 \forall n\in\mathbb N,\forall R,\quad
-s_R<s_n\Longrightarrow e_R<e_n
+s_R\lt s_n\Longrightarrow e_R\lt e_n
 }
 $$
 
@@ -347,25 +347,25 @@ Let:
 Then:
 
 $$
-u_o\le q_o<s(G(o))<e(G(o))<f_o
+u_o\le q_o\lt s(G(o))\lt e(G(o))\lt f_o
 $$
 
 If a valid reader $R$ can still hold $o$, it must have obtained the pointer before $o$ was unpublished. Therefore:
 
 $$
-s_R<u_o<s(G(o))
+s_R\lt u_o\lt s(G(o))
 $$
 
 By the grace-period theorem:
 
 $$
-e_R<e(G(o))
+e_R\lt e(G(o))
 $$
 
 Hence:
 
 $$
-e_R<e(G(o))<f_o
+e_R\lt e(G(o))\lt f_o
 $$
 
 So the object is not freed while any valid old reader may still use it.
@@ -405,7 +405,7 @@ $$
 \frac{
 Q(o)=k
 \land
-C>k
+C\gt k
 }{
 \langle S,C,Q,F\rangle
 \xrightarrow{\mathrm{reclaim}(o)}
@@ -413,6 +413,6 @@ C>k
 }
 $$
 
-The condition $C>k$ means that at least one full grace period that started after the `kfree_rcu()` call has completed.
+The condition $C\gt k$ means that at least one full grace period that started after the `kfree_rcu()` call has completed.
 
 Linux may batch callbacks and run the reclaim transition later. Delaying reclamation affects performance, but not safety.
