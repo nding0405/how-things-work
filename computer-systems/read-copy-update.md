@@ -39,35 +39,51 @@ The [Linux RCU documentation](https://docs.kernel.org/RCU/whatisRCU.html) spells
 
 ## Example
 
-The following is conceptual pseudocode:
+First, the restaurant version:
+
+```c
+customer()
+{
+    walk_into_restaurant();                 /* rcu_read_lock() */
+    menu = take_menu_from_stand();          /* rcu_dereference() */
+    if (menu != NULL)
+        read_and_order(menu);
+    leave_restaurant();                     /* rcu_read_unlock(), menu stays inside */
+}
+
+chef(new_menu)
+{
+    lock(kitchen_door);                     /* keep other chefs out */
+    old_menu = menu_on_stand;
+    put_on_stand(new_menu);                 /* rcu_assign_pointer() */
+    unlock(kitchen_door);
+    if (old_menu != NULL)
+        shred_after_everyone_leaves(old_menu);  /* kfree_rcu(): the grace period */
+}
+```
+And the same story in normal RCU pseudocode:
 
 ```c
 reader()
 {
     rcu_read_lock();
-
     p = rcu_dereference(current);
     if (p != NULL)
         use(p);
-
     rcu_read_unlock();
 }
 
 writer(new)
 {
     lock(writer_lock);
-
     old = current;
     rcu_assign_pointer(current, new);
-
     unlock(writer_lock);
-
     if (old != NULL)
         kfree_rcu(old, rcu);
 }
 ```
-
-The updater publishes `new` immediately. It cannot free `old` immediately because an earlier reader may still be using it.
+Line up the two versions and the mapping is one to one. The kitchen door is the writer lock: it stops chefs from colliding with each other, but customers never touch it. The shredder call is the only asynchronous part. It fires after the grace period, once every customer who could possibly hold the old menu has left.
 
 ## Why not wait until there are no readers?
 
