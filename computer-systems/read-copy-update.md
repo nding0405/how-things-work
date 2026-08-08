@@ -72,9 +72,9 @@ The updater publishes `new` immediately. It cannot free `old` immediately becaus
 The simplest rule would be:
 
 $$
-\left(\exists R.\operatorname{Active}(R,\tau)\right)
+\left(\exists R.\,\mathrm{Active}(R,\tau)\right)
 \Longrightarrow
-\neg\operatorname{Free}(o,\tau)
+\neg\mathrm{Free}(o,\tau)
 $$
 
 In words:
@@ -101,19 +101,19 @@ Let $R$ denote one dynamic, outermost RCU critical section. If locks are nested,
 Let:
 
 $$
-s_R=\operatorname{start}(R)
+s_R=\mathrm{start}(R)
 $$
 
 $$
-e_R=\operatorname{end}(R)
+e_R=\mathrm{end}(R)
 $$
 
 $$
-s_n=\operatorname{start}(G_n)
+s_n=\mathrm{start}(G_n)
 $$
 
 $$
-e_n=\operatorname{end}(G_n)
+e_n=\mathrm{end}(G_n)
 $$
 
 Here, $<$ means event order in the execution trace.
@@ -185,7 +185,7 @@ We do not use induction over grace-period numbers. The statement for $G_{n-1}$ d
 Define:
 
 $$
-\operatorname{Active}(R,\tau)
+\mathrm{Active}(R,\tau)
 \iff
 s_R\le\tau<e_R
 $$
@@ -194,11 +194,11 @@ At every time $\tau$:
 
 $$
 \boxed{
-\operatorname{Active}(R,\tau)
+\mathrm{Active}(R,\tau)
 \Longrightarrow
-\operatorname{Listed}(R,\tau)
+\mathrm{Listed}(R,\tau)
 \lor
-\exists c.\operatorname{Running}(R,c,\tau)
+\exists c.\,\mathrm{Running}(R,c,\tau)
 }
 \tag{1}
 $$
@@ -221,12 +221,12 @@ Therefore, (1) always holds.
 Define:
 
 $$
-\operatorname{Covered}_n(R,\tau)
+\mathrm{Covered}_n(R,\tau)
 \iff
 R\in B_n(\tau)
 \lor
 \exists c.\left(
-\operatorname{Running}(R,c,\tau)
+\mathrm{Running}(R,c,\tau)
 \land
 c\in W_n(\tau)
 \right)
@@ -238,9 +238,9 @@ $$
 \boxed{
 s_R<s_n
 \land
-\operatorname{Active}(R,\tau)
+\mathrm{Active}(R,\tau)
 \Longrightarrow
-\operatorname{Covered}_n(R,\tau)
+\mathrm{Covered}_n(R,\tau)
 }
 \tag{2}
 $$
@@ -385,14 +385,14 @@ Calling `kfree_rcu(o)` records the current GP counter and requests a future grac
 
 $$
 \frac{
-\operatorname{Unpublished}(o)
+\mathrm{Unpublished}(o)
 \land
-o\notin\operatorname{dom}(Q)
+o\notin\mathrm{dom}(Q)
 \land
 o\notin F
 }{
 \langle S,C,Q,F\rangle
-\xrightarrow{\operatorname{kfree_rcu}(o)}
+\xrightarrow{\mathrm{kfree\_rcu}(o)}
 \langle S,C,Q[o\mapsto S],F\rangle
 }
 $$
@@ -408,7 +408,7 @@ Q(o)=k
 C>k
 }{
 \langle S,C,Q,F\rangle
-\xrightarrow{\operatorname{reclaim}(o)}
+\xrightarrow{\mathrm{reclaim}(o)}
 \langle S,C,Q\setminus\{o\},F\cup\{o\}\rangle
 }
 $$
